@@ -1,0 +1,89 @@
+﻿@page "/rules"
+
+<MudText Typo="Typo.h4" Class="mb-4">Rule Management</MudText>
+
+<MudTextField @bind-Value="searchString" Placeholder="Search rules..."
+              Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Class="mb-4" />
+
+<MudTable Items="@rules" Dense="true" Hover="true" CanCancelEdit="true"
+          Filter="new Func<Rule, bool>(FilterFunc)"
+          Loading="@isLoading"
+          @bind-SelectedItem="selectedRule"
+          SortLabel="Sort By" CommitEditTooltip="Commit Edit"
+          OnCommitEditClick="@(() => Snackbar.Add("Edit committed"))"
+          RowEditPreview="BackupRule"
+          RowEditCancel="ResetRule"
+          RowEditCommit="CommitRule"
+>
+
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Rules</MudText>
+        <MudSpacer />
+        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="AddNewRule">
+            Add New Rule
+        </MudButton>
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Rule, object>(x => x.FeatureName)">Feature Name</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Rule, object>(x => x.EnvironmentName)">Environment Name</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Rule, object>(x => x.Tenant)">Tenant</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Rule, object>(x => x.IsEnabled)">Enabled</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Rule, object>(x => x.DateCreated)">Created</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Rule, object>(x => x.DateModified)">Modified</MudTableSortLabel>
+        </MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd DataLabel="Feature Name">@context.FeatureName</MudTd>
+        <MudTd DataLabel="Environment Name">@context.EnvironmentName</MudTd>
+        <MudTd DataLabel="Tenant">@context.Tenant</MudTd>
+        <MudTd DataLabel="Enabled">
+            <MudSwitch @bind-Value="@context.IsEnabled" Color="Color.Primary" />
+        </MudTd>
+        <MudTd DataLabel="Created">@context.DateCreated.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Modified">@context.DateModified.ToShortDateString()</MudTd>
+    </RowTemplate>
+
+    <RowEditingTemplate>
+        <MudTd DataLabel="Feature Name">
+            <MudText Typo="Typo.body2">@context.FeatureName</MudText>
+        </MudTd>
+        <MudTd DataLabel="Environment Name">
+            <MudText Typo="Typo.body2">@context.EnvironmentName</MudText>
+        </MudTd>
+        <MudTd DataLabel="Tenant">
+            <MudText Typo="Typo.body2">@context.Tenant</MudText>
+        </MudTd>
+        <MudTd DataLabel="Enabled">
+            <MudSwitch @bind-Value="context.IsEnabled" Color="Color.Primary" />
+        </MudTd>
+        <MudTd DataLabel="Created">
+            <MudText Typo="Typo.body2">@context.DateCreated.ToShortDateString()</MudText>
+        </MudTd>
+        <MudTd DataLabel="Modified">
+            <MudText Typo="Typo.body2">@context.DateModified.ToShortDateString()</MudText>
+        </MudTd>
+    </RowEditingTemplate>
+
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+
+    <EditButtonContent Context="button">
+        <MudIconButton Size="Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0"
+                       OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
+    </EditButtonContent>
+
+</MudTable>

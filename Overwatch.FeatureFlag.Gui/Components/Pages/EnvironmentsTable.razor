@@ -1,0 +1,73 @@
+﻿@page "/environments"
+
+<MudText Typo="Typo.h4" Class="mb-4">Environment Management</MudText>
+
+<MudTextField @bind-Value="searchString" Placeholder="Search environments..."
+              Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Class="mb-4" />
+
+<MudTable Items="@environments" Dense="true" Hover="true" CanCancelEdit="true"
+          Filter="new Func<Environment, bool>(FilterFunc)" 
+          Loading="@isLoading"
+          @bind-SelectedItem="selectedEnvironment"
+          SortLabel="Sort By" CommitEditTooltip="Commit Edit"
+          OnCommitEditClick="@(() => Snackbar.Add("Edit committed"))"
+          RowEditPreview="BackupEnvironment"
+          RowEditCancel="ResetEnvironment"
+          RowEditCommit="CommitEnvironment"
+>
+
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Environments</MudText>
+        <MudSpacer />
+        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="AddNewEnvironment">
+            Add New Environment
+        </MudButton>
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Environment, object>(x => x.Name)">Name</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Environment, object>(x => x.DateCreated)">Created</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Environment, object>(x => x.DateModified)">Modified</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Environment, object>(x => x.Rules.Count)">Rules</MudTableSortLabel>
+        </MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Created">@context.DateCreated.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Modified">@context.DateModified.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Rules">@context.Rules.Count</MudTd>
+    </RowTemplate>
+
+    <RowEditingTemplate>
+        <MudTd DataLabel="Name">
+            <MudTextField @bind-Value="context.Name" Required="true" Placeholder="Environment Name" />
+        </MudTd>
+        <MudTd DataLabel="Created">
+            <MudText Typo="Typo.body2">@context.DateCreated.ToShortDateString()</MudText>
+        </MudTd>
+        <MudTd DataLabel="Modified">
+            <MudText Typo="Typo.body2">@context.DateModified.ToShortDateString()</MudText>
+        </MudTd>
+        <MudTd DataLabel="Rules">
+            <MudText Typo="Typo.body2">@context.Rules.Count rules associated</MudText>
+        </MudTd>
+    </RowEditingTemplate>
+
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+
+    <EditButtonContent Context="button">
+        <MudIconButton Size="Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0"
+                       OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
+    </EditButtonContent>
+
+</MudTable>

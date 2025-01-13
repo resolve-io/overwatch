@@ -1,0 +1,107 @@
+﻿@page "/"
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge">
+    <MudGrid Spacing="3">
+
+        <!-- Total Environments -->
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard>
+                <MudCardContent>
+                    <MudIconButton Icon="@Icons.Material.Filled.Cloud" Color="Color.Primary" Size="Size.Large" />
+                    <MudText Typo="Typo.h4">@TotalEnvironments</MudText>
+                    <MudText Typo="Typo.body2">Environments</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <!-- Total Features -->
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard>
+                <MudCardContent>
+                    <MudIconButton Icon="@Icons.Material.Filled.Flag" Color="Color.Secondary" Size="Size.Large" />
+                    <MudText Typo="Typo.h4">@TotalFeatures</MudText>
+                    <MudText Typo="Typo.body2">Features</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <!-- Total Rules -->
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard>
+                <MudCardContent>
+                    <MudIconButton Icon="@Icons.Material.Filled.Rule" Color="Color.Tertiary" Size="Size.Large" />
+                    <MudText Typo="Typo.h4">@TotalRules</MudText>
+                    <MudText Typo="Typo.body2">Rules</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <!-- Active Rules -->
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard>
+                <MudCardContent>
+                    <MudIconButton Icon="@Icons.Material.Filled.ToggleOn" Color="Color.Info" Size="Size.Large" />
+                    <MudText Typo="Typo.h4">@ActiveRules</MudText>
+                    <MudText Typo="Typo.body2">Active Rules</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <MudGrid Spacing="3" Class="mt-4">
+        <!-- Features per Environment (Pie Chart) -->
+        <MudItem xs="12" md="6">
+            <MudPaper>
+                <MudChart ChartType="ChartType.Pie" InputData="@FeaturesPerEnvironmentData" InputLabels="@FeaturesPerEnvironmentLabels" />
+                <MudText Typo="Typo.body2" Class="mt-2">Features per Environment</MudText>
+            </MudPaper>
+        </MudItem>
+
+        <!-- Rules per Feature (Bar Chart) -->
+        <MudItem xs="12" md="6">
+            <MudPaper>
+                <MudChart ChartType="ChartType.Bar" ChartSeries="@RulesPerFeatureSeries" XAxisLabels="@RulesPerFeatureLabels" />
+                <MudText Typo="Typo.body2" Class="mt-2">Rules per Feature</MudText>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private int TotalEnvironments = 0;
+    private int TotalFeatures = 0;
+    private int TotalRules = 0;
+    private int ActiveRules = 0;
+
+    private double[] FeaturesPerEnvironmentData = [];
+    private string[] FeaturesPerEnvironmentLabels = [];
+
+    private List<ChartSeries> RulesPerFeatureSeries = [];
+    private string[] RulesPerFeatureLabels = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        // // Fetch metrics
+        // TotalEnvironments = await FeatureFlagService.GetTotalEnvironmentsAsync();
+        // TotalFeatures = await FeatureFlagService.GetTotalFeaturesAsync();
+        // TotalRules = await FeatureFlagService.GetTotalRulesAsync();
+        // ActiveRules = await FeatureFlagService.GetActiveRulesCountAsync();
+
+        // // Fetch and prepare data for Features per Environment chart
+        // var featuresPerEnvironment = await FeatureFlagService.GetFeaturesPerEnvironmentAsync();
+        // FeaturesPerEnvironmentData = featuresPerEnvironment.Values.ToArray();
+        // FeaturesPerEnvironmentLabels = featuresPerEnvironment.Keys.ToArray();
+
+        // // Fetch and prepare data for Rules per Feature chart
+        // var rulesPerFeature = await FeatureFlagService.GetRulesPerFeatureAsync();
+        // RulesPerFeatureLabels = rulesPerFeature.Keys.ToArray();
+        // RulesPerFeatureSeries = new List<ChartSeries>
+        // {
+        //     new ChartSeries
+        //     {
+        //         Name = "Rules",
+        //         Data = rulesPerFeature.Values.Select(r => (double)r).ToArray()
+        //     }
+        // };
+    }
+}

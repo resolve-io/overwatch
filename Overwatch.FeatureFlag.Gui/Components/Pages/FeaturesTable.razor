@@ -1,0 +1,49 @@
+﻿@page "/features"
+<MudText Typo="Typo.h4" Class="mb-4">Features Management</MudText>
+
+
+<MudTextField @bind-Value="searchString" Placeholder="Search features..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Class="mb-4" />
+<MudTable Items="filteredFeatures" Dense="true" Hover="true" CanCancelEdit="true" Filter="FilterFunc"
+          @bind-SelectedItem="selectedFeature" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
+          OnCommitEditClick="@(() => Snackbar.Add("Edit committed"))" 
+          RowEditPreview="BackupFeature" 
+          RowEditCancel="ResetFeature"
+          RowEditCommit="CommitFeature" 
+          ApplyButtonPosition="@applyButtonPosition" 
+          EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Features</MudText>
+        <MudSpacer />
+        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="AddNewFeature">Add New Feature</MudButton>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<Feature, object>(x => x.Name)">Name</MudTableSortLabel></MudTh>
+        <MudTh>Created</MudTh>
+        <MudTh>Modified</MudTh>
+        <MudTh>Enabled</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Created">@context.DateCreated.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Modified">@context.DateModified.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Enabled">
+            <MudSwitch @bind-Value="@context.IsEnabled" Color="Color.Primary" />
+        </MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Name">
+            <MudTextField @bind-Value="context.Name" Required />
+        </MudTd>
+        <MudTd DataLabel="Created">@context.DateCreated.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Modified">@context.DateModified.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Enabled">
+            <MudSwitch @bind-Value="context.IsEnabled" Color="Color.Primary" />
+        </MudTd>
+    </RowEditingTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+    <EditButtonContent Context="button">
+        <MudIconButton Size="Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
+    </EditButtonContent>
+</MudTable>

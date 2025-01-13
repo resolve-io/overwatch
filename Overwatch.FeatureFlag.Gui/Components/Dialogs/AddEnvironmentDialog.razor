@@ -1,0 +1,39 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.h6">@ContentText</MudText>
+        <MudTextField @bind-Value="EnvironmentName" Label="Environment Name" Required="true" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Variant="Variant.Outlined">Cancel</MudButton>
+        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public string ContentText { get; set; }
+
+    [Parameter]
+    public string ButtonText { get; set; }
+
+    [Parameter]
+    public Color Color { get; set; }
+
+    private string EnvironmentName { get; set; } = string.Empty;
+
+    private void Submit()
+    {
+        if (!string.IsNullOrWhiteSpace(EnvironmentName))
+        {
+            MudDialog.Close(DialogResult.Ok(EnvironmentName));
+        }
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+}

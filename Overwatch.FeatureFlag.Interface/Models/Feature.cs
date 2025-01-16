@@ -1,5 +1,6 @@
 ﻿namespace Overwatch.FeatureFlag.Interface.Models;
 
+public record CreateFeatureRequest(string Name, Guid[]? EnvironmentIds) : IRequest<Feature>;
 public record Feature
 {
     /// <summary>

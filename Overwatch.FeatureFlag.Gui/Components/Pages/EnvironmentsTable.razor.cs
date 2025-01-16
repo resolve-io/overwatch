@@ -7,7 +7,7 @@ public partial class EnvironmentsTable : ComponentBase
 {
     private string searchString = "";
     private Environment? selectedEnvironment;
-    private List<Environment> environments = new List<Environment>();
+    private List<Environment> environments = [];
 
     private Environment environmentBeforeEdit = new();
     private bool isLoading = true;
@@ -81,12 +81,13 @@ public partial class EnvironmentsTable : ComponentBase
 
         var result = await dialog.Result;
 
-        if (!result.Canceled && result.Data is string environmentName)
+        if (result is { Canceled: false, Data: string environmentName })
         {
             try
             {
                 var environment = await EnvironmentsApiClient.CreateEnvironmentAsync(environmentName);
                 Snackbar.Add($"Environment '{environment.Name}' created successfully.", Severity.Success);
+
                 // Refresh the environment list
                 await RefreshEnvironmentList();
             }

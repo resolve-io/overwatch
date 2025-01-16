@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using MudBlazor;
+using Overwatch.FeatureFlag.Gui.Components.Dialogs;
 using Overwatch.FeatureFlag.Interface;
 
 namespace Overwatch.FeatureFlag.Gui.Components.Pages;
@@ -9,9 +10,8 @@ public partial class RulesTable : ComponentBase
     private string searchString = "";
 
     private Rule? selectedRule;
-    private List<Rule> rules = new();
+    private List<Rule> rules = [];
     private bool isLoading = true;
-    private List<Rule> filteredRules => rules.Where(FilterFunc).ToList();
     private Rule ruleBeforeEdit;
 
     [Inject] private RulesApiClient RulesApiClient { get; set; } = default!;
@@ -20,7 +20,7 @@ public partial class RulesTable : ComponentBase
     {
         try
         {
-            rules = (await RulesApiClient.GetAllRulesAsync()).ToList();
+            await RefreshRulesList();
         }
         catch (Exception ex)
         {
@@ -86,9 +86,24 @@ public partial class RulesTable : ComponentBase
         }
     }
 
-    private void AddNewRule()
+    private async Task AddNewRule()
     {
-        Snackbar.Add("Add new rule clicked.", Severity.Info);
+        var parameters = new DialogParameters
+        {
+            { "ContentText", "Enter the rule details below." },
+            { "ButtonText", "Create Rule" },
+            { "Color", Color.Primary }
+        };
+
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+
+        var dialog = await DialogService.ShowAsync<AddRuleDialog>("Create Rule", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await RefreshRulesList();
+        }
     }
 
     private bool FilterFunc(Rule rule)

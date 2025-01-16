@@ -1,0 +1,22 @@
+﻿
+<MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.h6">@ContentText</MudText>
+
+        <!-- Feature Name Input -->
+        <MudTextField @bind-Value="@FeatureName" Label="Feature Name" Required="true" />
+
+        <!-- Environment Select List -->
+        <MudSelect T="string" Label="Enviorments" MultiSelection="true" @bind-Value="Value" @bind-SelectedValues="Options"  Required="false">
+            @foreach (var env in Environments)
+            {
+                <MudSelectItem T="string" Value="@env.Name">@env.Name</MudSelectItem>
+            }
+        </MudSelect>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="@Cancel" Variant="Variant.Outlined">Cancel</MudButton>
+        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
+    </DialogActions>
+</MudDialog>

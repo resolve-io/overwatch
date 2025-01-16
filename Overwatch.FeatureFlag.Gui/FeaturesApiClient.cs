@@ -39,6 +39,17 @@ public class FeaturesApiClient(HttpClient httpClient)
         response.EnsureSuccessStatusCode();
     }
 
+    // POST: /api/features/{name} - Create a new Feature
+    public async Task<Feature> CreateFeatureAsync(string name, Guid[]? environmentIds = null)
+    {
+        var body = new CreateFeatureRequest(name, environmentIds ?? []);
+
+        var response = await httpClient.PostAsJsonAsync($"/api/features/{name}", body);
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync<Feature>();
+    }
+
+
     // GET: /api/features/{name} - Lookup a Feature by Name
     public async Task<Feature?> GetFeatureByNameAsync(string name)
     {

@@ -6,11 +6,10 @@
 <MudTable Items="filteredFeatures" Dense="true" Hover="true" CanCancelEdit="true" Filter="FilterFunc"
           @bind-SelectedItem="selectedFeature" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
           OnCommitEditClick="@(() => Snackbar.Add("Edit committed"))" 
+          Loading="@isLoading"
           RowEditPreview="BackupFeature" 
           RowEditCancel="ResetFeature"
-          RowEditCommit="CommitFeature" 
-          ApplyButtonPosition="@applyButtonPosition" 
-          EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
+          RowEditCommit="CommitFeature">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Features</MudText>
         <MudSpacer />

@@ -1,5 +1,6 @@
 using MediatR;
 using Overwatch.FeatureFlag.Api.Application.Handlers.Features;
+using Overwatch.FeatureFlag.Interface.Models;
 
 namespace Overwatch.FeatureFlag.Api.Endpoints.Features;
 
@@ -24,12 +25,13 @@ public static class FeatureEndpoints
             .WithTags("Features")
             .WithSummary("Lookup a Feature by name");
 
-        app.MapPost("/api/features/{name}", async ([FromServices] IMediator mediator, [FromRoute] string name) =>
-                Results.Ok(await mediator.Send(new CreateFeatureRequest(name))))
+        app.MapPost("/api/features/{name}", async ([FromServices] IMediator mediator, [FromBody] CreateFeatureRequest createFeatureRequest) => 
+                Results.Ok((object?)await mediator.Send(createFeatureRequest)))
             .WithTags("Features")
             .WithSummary("Create a new Feature")
-            .WithDescription("Creates a new feature with the specified name.");
-        
+            .WithDescription("Creates a new feature with the specified name and optional environment IDs.");
+
+
         app.MapDelete("/api/features/{id:guid}", async (IMediator mediator, [FromRoute]Guid id) =>
                 Results.Ok(await mediator.Send(new DeleteFeatureRequest(id))))
             .WithTags("Features")

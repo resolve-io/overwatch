@@ -3,7 +3,6 @@ using Overwatch.FeatureFlag.Interface.Models;
 
 namespace Overwatch.FeatureFlag.Api.Application.Handlers.Features;
 
-public record CreateFeatureRequest(string Name) : IRequest<Feature>;
 public class CreateFeaturesRequestHandler(ComponentDbContext db) : IRequestHandler<CreateFeatureRequest, Feature>
 {
     public async Task<Feature> Handle(CreateFeatureRequest request, CancellationToken cancellationToken)

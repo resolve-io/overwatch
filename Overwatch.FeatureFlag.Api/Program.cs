@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.RegisterApplication(builder.Configuration);
 
-builder.AddSqlServerDbContext<ComponentDbContext>(connectionName: "db");
+builder.AddSqlServerDbContext<ComponentDbContext>(connectionName: "mssqlConnection");
 
 //builder.Services.AddDbContextPool<ComponentDbContext>(options =>
 //    options.UseSqlServer("db", sqlOptions =>

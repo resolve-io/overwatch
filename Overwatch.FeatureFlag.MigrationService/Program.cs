@@ -9,7 +9,7 @@ builder.Services.AddHostedService<DatabaseInitializer>();
 builder.AddServiceDefaults();
 
 builder.Services.AddDbContextPool<ComponentDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("db"), sqlOptions =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("mssqlConnection"), sqlOptions =>
     {
         sqlOptions.MigrationsAssembly("Overwatch.FeatureFlag.MigrationService");
         // Workaround for https://github.com/dotnet/aspire/issues/1023

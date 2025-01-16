@@ -1,24 +1,29 @@
+using Aspire.Hosting;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
 var cache = builder.AddRedis("cache");
 
-var mysql = builder.AddSqlServer("sqlserver")
-    .WithLifetime(ContainerLifetime.Persistent)
-    .AddDatabase("db");
+var sqlConnection = builder.AddConnectionString("mssqlConnection");
+//var database = builder.AddSqlServer("mssqlServer").AddDatabase("overwatch", "overwatch")
+//    .WithConnectionStringRedirection(sqlConnection.Resource);
+
+//var mysql = builder
+//    .AddSqlServer("sqlserver")
+//    .WithLifetime(ContainerLifetime.Persistent)
+//    .AddDatabase("db");
 
 var migrationService = builder.AddProject<Overwatch_FeatureFlag_MigrationService>("featureflag-migration")
-    .WithReference(mysql)
-    .WaitFor(mysql);
+    .WithReference(sqlConnection);
+    
 
 var apiService = builder.AddProject<Overwatch_FeatureFlag_Api>("featureflag-api")
     .WithExternalHttpEndpoints()
     .WaitForCompletion(migrationService)
-    .WithReference(mysql)
+    .WithReference(sqlConnection)
     .WithReference(cache)
-    .WaitFor(cache)
-    .WaitFor(mysql);
+    .WaitFor(cache);
 
 builder.AddProject<Overwatch_FeatureFlag_Gui>("featureflag-gui")
     .WithExternalHttpEndpoints()

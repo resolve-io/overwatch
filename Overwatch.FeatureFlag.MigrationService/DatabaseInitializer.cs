@@ -36,6 +36,12 @@ public class DatabaseInitializer(
 
     private static async Task EnsureDatabaseAsync(ComponentDbContext dbContext, CancellationToken cancellationToken)
     {
+        var connectionString = dbContext.Database.GetConnectionString();
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new InvalidOperationException("The ConnectionString property has not been initialized.");
+        }
+
         var dbCreator = dbContext.GetService<IRelationalDatabaseCreator>();
 
         var strategy = dbContext.Database.CreateExecutionStrategy();
